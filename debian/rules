@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+
+export PYBUILD_NAME=ceph-iscsi-config
+%:
+	dh $@ --with python2,systemd --buildsystem=pybuild
+
+override_dh_installinit:
+	install -d -m0755 debian/ceph-iscsi-config/lib/systemd/system
+	install -m0644 usr/lib/systemd/system/rbd-target-gw.service debian/ceph-iscsi-config/lib/systemd/system
+
+	dh_systemd_enable
+	dh_systemd_start --no-restart-on-upgrade

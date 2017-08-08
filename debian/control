@@ -1,0 +1,36 @@
+Source: ceph-iscsi-config
+Section: admin
+Priority: optional
+Homepage: http://github.com/ceph/ceph-iscsi-config
+Vcs-Git: git://github.com/ceph/ceph-iscsi-config.git
+Vcs-Browser: https://github.com/ceph/ceph-iscsi-config
+Maintainer: Ceph Maintainers <ceph-maintainers@lists.ceph.com>
+Uploaders: Ken Dreyer <kdreyer@redhat.com>,
+           Alfredo Deza <adeza@redhat.com>,
+Build-Depends: debhelper (>= 9),
+               dh-python,
+               dh-systemd,
+               python-all,
+               python-setuptools,
+Standards-Version: 3.9.6
+
+Package: ceph-iscsi-config
+Architecture: linux-any
+Depends: ${misc:Depends},
+         ${python:Depends},
+         python-crypto (>= 2.6),
+         python-netaddr (>= 0.7.5),
+         python-netifaces (>= 0.10.4),
+         python-rados (>= 10.2.2),
+         python-rbd (>= 10.2.2),
+         python-rtslib-fb (>= 2.1.64),
+Description: Python package providing the modules used to handle the configuration
+ of an iSCSI gateway, backed by ceph/RBD. This package installs configuration
+ management logic (ceph_iscsi_config modules) and an rbd-target-gw systemd service.
+ .
+ The configuration management modules may be are consumed by custom Ansible
+ playbooks, and API server available from a separate package.
+ .
+ The rbd-target-gw service is responsible for startup and shutdown actions,
+ replacing the 'target' service used in standalone LIO implementations.
+

@@ -1,0 +1,5 @@
+ceph-iscsi-config (2.2-1) unstable; urgency=low
+
+  * initial release
+
+ -- Jason Dillaman <dillaman@redhat.com>  Tue, 08 Aug 2017 14:55:50 -0400
