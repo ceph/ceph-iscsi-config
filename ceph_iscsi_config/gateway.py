@@ -197,7 +197,6 @@ class GWTarget(object):
                         self.bind_alua_group_to_lun(config,
                                                     lun,
                                                     tpg_ip_address=self.active_portal_ip)
-
                     except CephiSCSIInval as err:
                         self.error = True
                         self.error_msg = e
@@ -449,7 +448,8 @@ class GWTarget(object):
                     try:
                         self.bind_alua_group_to_lun(config, mapped_lun)
                     except CephiSCSIInval as err:
-                        self.logger.error("Could not bind LUN to ALUA group: {}".format(err))
+                        self.logger.error("Could not bind LUN to ALUA group: "
+                                          "{}".format(err))
                         self.error = True
                         self.error_msg = err
                         return
