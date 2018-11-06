@@ -7,7 +7,7 @@ import re
 from time import sleep
 from socket import gethostname
 
-from rtslib_fb import UserBackedStorageObject, root
+from rtslib_fb import (UserBackedStorageObject, root, tcm)
 from rtslib_fb.utils import RTSLibError
 
 import ceph_iscsi_config.settings as settings
@@ -799,6 +799,13 @@ class LUN(GWObject):
                     return
 
                 break
+
+    @staticmethod
+    def clear_tcm_cache():
+        # the tcm module uses a global called bs_cache and performs lookups
+        # against this to verify a storage object exists. However, this can
+        # potentially get out-of-sync with reality
+        tcm.bs_cache = {}
 
     @staticmethod
     def valid_disk(ceph_iscsi_config, logger, **kwargs):
