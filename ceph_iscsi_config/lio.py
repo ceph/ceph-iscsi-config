@@ -14,31 +14,30 @@ class LIO(object):
         self.error_msg = ''
         self.changed = False
 
-    def drop_lun_maps(self, config, update_config):
-
+    def ceph_storage_objects(self, config):
         disk_keys = config.config['disks'].keys()
 
         for stg_object in self.lio_root.storage_objects:
-
             if stg_object.name in disk_keys:
+                yield stg_object
 
-                # this is an rbd device that's in the config object,
-                # so remove it
-                try:
-                    stg_object.delete()
-                except RTSLibError as err:
-                    self.error = True
-                    self.error_msg = err
-                else:
-                    self.changed = True
+    def drop_lun_maps(self, config, update_config):
+        for stg_object in self.ceph_storage_objects(config):
+            # this is an rbd device that's in the config object,
+            # so remove it
+            try:
+                stg_object.delete()
+            except RTSLibError as err:
+                self.error = True
+                self.error_msg = err
+            else:
+                self.changed = True
 
-                    if update_config:
-                        # update the disk item to remove the wwn info
-                        image_metadata = config.config['disks'][stg_object.name]
-                        image_metadata['wwn'] = ''
-                        config.update_item("disks",
-                                           stg_object.name,
-                                           image_metadata)
+                if update_config:
+                    # update the disk item to remove the wwn info
+                    image_metadata = config.config['disks'][stg_object.name]
+                    image_metadata['wwn'] = ''
+                    config.update_item("disks", stg_object.name, image_metadata)
 
 
 class Gateway(LIO):

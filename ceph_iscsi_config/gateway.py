@@ -17,6 +17,7 @@ from ceph_iscsi_config.common import Config
 from ceph_iscsi_config.alua import alua_create_group, alua_format_group_name
 from ceph_iscsi_config.client import GWClient
 from ceph_iscsi_config.gateway_object import GWObject
+from ceph_iscsi_config.lio import LIO
 
 __author__ = 'pcuzner@redhat.com'
 
@@ -200,9 +201,9 @@ class GWTarget(GWObject):
         :return: None
         """
         # check that there aren't any disks or clients in the configuration
-        lio_root = root.RTSRoot()
+        lio = LIO()
 
-        disk_count = len([disk for disk in lio_root.storage_objects])
+        disk_count = len([disk for disk in lio.ceph_storage_objects(self.config)])
         clients = []
         for tpg in self.tpg_list:
             tpg_clients = [node for node in tpg._list_node_acls()]
@@ -400,11 +401,9 @@ class GWTarget(GWObject):
         so this method, brings those objects into the gateways TPG
         """
 
-        lio_root = root.RTSRoot()
-
+        lio = LIO()
         # process each storage object added to the gateway, and map to the tpg
-        for stg_object in lio_root.storage_objects:
-
+        for stg_object in lio.ceph_storage_objects(config):
             for tpg in self.tpg_list:
                 self.logger.debug("processing tpg{}".format(tpg.tag))
 
