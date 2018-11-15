@@ -739,6 +739,10 @@ class LUN(GWObject):
             if (settings.config.cephconf != '/etc/ceph/ceph.conf'):
                 cfgstring += ";conf={}".format(settings.config.cephconf)
 
+            # Another app might have created/removed the dev. Force the cache
+            # to update itself.
+            lio_root = root.RTSRoot()
+            lio_root.invalidate_caches()
             new_lun = UserBackedStorageObject(name=self.config_key,
                                               config=cfgstring,
                                               size=self.size_bytes,
