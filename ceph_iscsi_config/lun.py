@@ -912,6 +912,18 @@ class LUN(GWObject):
                         "to: {}".format(disk_key,
                                         ','.join(allocation_list)))
 
+            try:
+                with rados.Rados(conffile=settings.config.cephconf) as cluster:
+                    with cluster.open_ioctx(kwargs['pool']) as ioctx:
+                        with rbd.Image(ioctx, kwargs['image']) as rbd_image:
+                            if list(rbd_image.list_snaps()):
+                                return ("Unable to delete {}. Snapshots must "
+                                        "be removed first.".format(disk_key))
+            except rbd.ImageNotFound:
+                pass
+            except Exception as e:
+                return "Unable to query {}: {}".format(disk_key, e)
+
         return 'ok'
 
     @staticmethod
