@@ -3,7 +3,7 @@ Description=Setup system to export rbd images through LIO
 
 Requires=sys-kernel-config.mount
 After=sys-kernel-config.mount network-online.target tcmu-runner.service
-Wants=network-online.target tcmu-runner.service
+Wants=network-online.target tcmu-runner.service rbd-target-api.service
 
 [Service]
 LimitNOFILE=1048576
