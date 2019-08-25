@@ -53,7 +53,7 @@ def ceph_rm_blacklist(blacklisted_ip):
                                      format(blacklisted_ip=blacklisted_ip,
                                             cephconf=settings.config.cephconf),
                                      stderr=subprocess.STDOUT, shell=True)
-    if "un-blacklisting" in result:
+    if ("un-blacklisting" in result) or ("isn't blacklisted" in result):
         logger.info("Successfully removed blacklist entry")
         return True
     else:
