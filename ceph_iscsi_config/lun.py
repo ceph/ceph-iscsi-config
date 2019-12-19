@@ -699,6 +699,7 @@ class LUN(GWObject):
     def lio_stg_object(self):
         found_it = False
         rtsroot = root.RTSRoot()
+        rtsroot.invalidate_caches()
         for stg_object in rtsroot.storage_objects:
 
             # First match on name, but then check the pool incase the same
@@ -790,6 +791,7 @@ class LUN(GWObject):
                     else:
                         break       # continue to the next tpg
 
+        lio_root.invalidate_caches()
         for stg_object in lio_root.storage_objects:
             if stg_object.name == self.config_key:
                 try:

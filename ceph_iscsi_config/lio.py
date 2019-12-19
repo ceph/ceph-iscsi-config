@@ -17,6 +17,7 @@ class LIO(object):
     def ceph_storage_objects(self, config):
         disk_keys = config.config['disks'].keys()
 
+        self.lio_root.invalidate_caches()
         for stg_object in self.lio_root.storage_objects:
             if stg_object.name in disk_keys:
                 yield stg_object
